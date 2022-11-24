@@ -1,4 +1,4 @@
-import {GoogleLogin, GoogleOAuthProvider} from '@react-oauth/google';
+import {CredentialResponse, GoogleLogin, GoogleOAuthProvider} from '@react-oauth/google';
 import jwt_decode from "jwt-decode";
 import {useEffect, useState} from "react";
 import {useAppDispatch} from "../store/hooks";
@@ -23,11 +23,11 @@ export default function Login() {
         }
     }, [])
 
-    const handleSuccessLogin = (credentialResponse: { credential: string }) => {
+    const handleSuccessLogin = (credentialResponse: CredentialResponse) => {
         /** encrypt and store the credentials to local storage */
-        window.localStorage.setItem('credential', encrypt(credentialResponse.credential));
+        window.localStorage.setItem('credential', encrypt(credentialResponse.credential || ''));
 
-        const {name, picture, email}: AuthUserState = jwt_decode(credentialResponse.credential);
+        const {name, picture, email}: AuthUserState = jwt_decode(credentialResponse.credential || '');
 
         initUserAndRedirect({name, picture, email})
     }
@@ -56,7 +56,7 @@ export default function Login() {
             )}
 
             <div className={'mt-8 flex justify-center'}>
-                <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_REACT_APP_GOOGLE_CLIENT_ID}>
+                <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_REACT_APP_GOOGLE_CLIENT_ID || ''}>
                     <GoogleLogin
                         onSuccess={handleSuccessLogin}
                         size={'large'}
