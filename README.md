@@ -2,9 +2,11 @@ Zwebapp - This is a demo webapp developed by Ahmad Aziz (ahmadaziz97@live.com) ð
 
 ## Running Project
 
-First, install all the dependencies:
+Firstly clone and install all the dependencies:
 
 ```bash
+git clone https://github.com/densityx/zwebapp.git
+
 yarn
 # or
 npm install
@@ -18,7 +20,9 @@ yarn dev
 ```
 
 ## Production
-
+View the project live in production
+- [Vercel](https://zwebapp.vercel.app/login)
+- [AWS Amplify Hosting](https://main.d3jhhsbjeu44ul.amplifyapp.com/) 
 
 ## Screenshots Preview
 <img src="img/1.png">
