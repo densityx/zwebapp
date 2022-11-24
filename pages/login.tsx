@@ -6,6 +6,7 @@ import {addAuthUser, AuthUserState} from "../store/redux/userSlice";
 import {useRouter} from "next/router";
 import {decrypt, encrypt} from '../services/app';
 import Heading from '../components/Heading';
+import Metadata from '../components/Metadata';
 
 export default function Login() {
     const dispatch = useAppDispatch();
@@ -40,30 +41,39 @@ export default function Login() {
     }
 
     return (
-        <div className={'card'}>
-            <Heading title={'Login'}/>
+        <>
+            <Metadata
+                title={'Login'}
+                description={'Login to Zwebapp using your Google account'}
+                image={'/img/2.png'}
+                url={router.asPath}
+            />
 
-            <article className={'prose dark:prose-invert mt-4'}>
-                <p className="text-center">
-                    Login using your Google account
-                </p>
-            </article>
+            <div className={'card'}>
+                <Heading title={'Login'}/>
 
-            {error && (
-                <div className={'content-card bg-rose-100'}>
-                    <p className={'text-rose-500'}>Login Failed. Please try again later.</p>
+                <article className={'prose dark:prose-invert mt-4'}>
+                    <p className="text-center">
+                        Login using your Google account
+                    </p>
+                </article>
+
+                {error && (
+                    <div className={'content-card bg-rose-100'}>
+                        <p className={'text-rose-500'}>Login Failed. Please try again later.</p>
+                    </div>
+                )}
+
+                <div className={'mt-8 flex justify-center'}>
+                    <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_REACT_APP_GOOGLE_CLIENT_ID || ''}>
+                        <GoogleLogin
+                            onSuccess={handleSuccessLogin}
+                            size={'large'}
+                            onError={() => setError(true)}
+                        />
+                    </GoogleOAuthProvider>
                 </div>
-            )}
-
-            <div className={'mt-8 flex justify-center'}>
-                <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_REACT_APP_GOOGLE_CLIENT_ID || ''}>
-                    <GoogleLogin
-                        onSuccess={handleSuccessLogin}
-                        size={'large'}
-                        onError={() => setError(true)}
-                    />
-                </GoogleOAuthProvider>
             </div>
-        </div>
+        </>
     );
 }

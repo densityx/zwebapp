@@ -1,4 +1,5 @@
 import Heading from "../components/Heading";
+import Metadata from "../components/Metadata";
 
 const stack = [
     'Next.js',
@@ -10,20 +11,29 @@ const stack = [
 
 export default function About() {
     return (
-        <div className={'card'}>
-            <Heading title={'About'}/>
+        <>
+            <Metadata
+                title={'About'}
+                description={'This is a demo webapp developed by Ahmad Aziz'}
+                image={'/img/7.png'}
+                url={'/about'}
+            />
 
-            <article className={'prose dark:prose-invert content-card'}>
-                <p>
-                    This is a demo webapp developed by Ahmad Aziz (ahmadaziz97@live.com)
-                </p>
+            <div className={'card'}>
+                <Heading title={'About'}/>
 
-                <p className={'mt-8 space-x-2'}>
-                    {(stack.map((s, i) => (
-                        <span className={'badge badge-custom'} key={i}>{s}</span>
-                    )))}
-                </p>
-            </article>
-        </div>
+                <article className={'prose dark:prose-invert content-card'}>
+                    <p>
+                        This is a demo webapp developed by Ahmad Aziz (ahmadaziz97@live.com)
+                    </p>
+
+                    <p className={'mt-8 space-x-2'}>
+                        {(stack.map((s, i) => (
+                            <span className={'badge badge-custom'} key={i}>{s}</span>
+                        )))}
+                    </p>
+                </article>
+            </div>
+        </>
     )
 }

@@ -1,8 +1,9 @@
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 import {useAppSelector} from "../store/hooks";
 import {selectAuthUser} from "../store/redux/userSlice";
 import {useRouter} from "next/router";
 import Heading from "../components/Heading";
+import Metadata from "../components/Metadata";
 
 export default function Profile() {
     const router = useRouter();
@@ -20,21 +21,30 @@ export default function Profile() {
     }
 
     return (
-        <div className={'card'}>
-            <img
-                src={authUser.picture}
-                className={'rounded-full'}
-                alt={authUser.name + ' profile picture'}
+        <>
+            <Metadata
+                title={'Welcome ' + authUser.name}
+                description={'Welcome back ' + authUser.name}
+                image={'/img/3.png'}
+                url={router.asPath}
             />
 
-            <Heading
-                title={`Hello and Welcome, ${authUser.name}`}
-                classes={'mt-4'}
-            />
+            <div className={'card'}>
+                <img
+                    src={authUser.picture}
+                    className={'rounded-full'}
+                    alt={authUser.name + ' profile picture'}
+                />
 
-            <p className={'badge'}>
-                {authUser.email}
-            </p>
-        </div>
+                <Heading
+                    title={`Hello and Welcome, ${authUser.name}`}
+                    classes={'mt-4'}
+                />
+
+                <p className={'badge'}>
+                    {authUser.email}
+                </p>
+            </div>
+        </>
     )
 }

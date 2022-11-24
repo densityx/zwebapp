@@ -43,15 +43,21 @@ const initialState: UserState = {
 export const fetchAllUsers = createAsyncThunk(
     'user/fetchAll',
     async (filter: { nameStartsWith: string, nameEndsWith: string }) => {
-        const {data: {data: users}} = await axios.get('https://reqres.in/api/users?per_page=12');
+        try {
+            const {data: {data: users}} = await axios.get('https://reqres.in/api/users?per_page=12');
 
-        return users?.filter((user: { first_name: string, last_name: string }) => {
-            if (!filter.nameStartsWith || !filter.nameEndsWith) {
-                return user;
+            return users?.filter((user: { first_name: string, last_name: string }) => {
+                if (!filter.nameStartsWith || !filter.nameEndsWith) {
+                    return user;
+                }
+
+                return (user.first_name[0] === filter.nameStartsWith || user.last_name[0] === filter.nameEndsWith);
+            });
+        } catch (e) {
+            if (process.env.NEXT_PUBLIC_ENV === 'development') {
+                console.log(e.message, 'The\'s an error while requesting the API');
             }
-
-            return (user.first_name[0] === filter.nameStartsWith || user.last_name[0] === filter.nameEndsWith);
-        });
+        }
     }
 );
 
