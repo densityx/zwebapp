@@ -77,7 +77,7 @@ export default function Users() {
                         </button>
                     </div>
 
-                    <div className={'grid grid-cols-2 gap-6 mt-4'}>
+                    <div className={'grid grid-cols-1 lg:grid-cols-2 gap-6 mt-4'}>
                         <label htmlFor="starts-with">
                         <span className={'input-label'}>
                             Name Starts With
