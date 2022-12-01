@@ -23,6 +23,7 @@ export interface UserState {
     filter: {
         nameStartsWith: string;
         nameEndsWith: string;
+        page: number;
     },
     users: UsersState[];
 }
@@ -36,15 +37,16 @@ const initialState: UserState = {
     filter: {
         nameStartsWith: 'G',
         nameEndsWith: 'W',
+        page: 1,
     },
     users: [],
 };
 
 export const fetchAllUsers = createAsyncThunk(
     'user/fetchAll',
-    async (filter: { nameStartsWith: string, nameEndsWith: string }) => {
+    async (filter: { nameStartsWith: string, nameEndsWith: string, page: number }) => {
         try {
-            const {data: {data: users}} = await axios.get('https://reqres.in/api/users?per_page=12');
+            const {data: {data: users}} = await axios.get(`https://reqres.in/api/users?page=${filter.page}`);
 
             return users?.filter((user: { first_name: string, last_name: string }) => {
                 if (!filter.nameStartsWith || !filter.nameEndsWith) {
@@ -70,6 +72,7 @@ export const counterSlice = createSlice({
         },
         resetFilter: (state) => {
             state.filter = {
+                page: state.filter.page,
                 nameStartsWith: '',
                 nameEndsWith: '',
             }
@@ -79,6 +82,9 @@ export const counterSlice = createSlice({
         },
         updateNameEndsWith: (state, action) => {
             state.filter.nameEndsWith = action.payload
+        },
+        navigatePagination: (state, action) => {
+            state.filter.page = action.payload
         },
         logoutUser: (state) => {
             /** logout google oauth 2 */
@@ -107,11 +113,13 @@ export const {
     resetFilter,
     updateNameStartsWith,
     updateNameEndsWith,
+    navigatePagination,
     logoutUser
 } = counterSlice.actions;
 
 export const selectAuthUser = (state: AppState) => state.user.authUser;
 export const selectUsers = (state: AppState) => state.user.users;
 export const selectFilter = (state: AppState) => state.user.filter;
+export const selectPage = (state: AppState) => state.user.filter.page;
 
 export default counterSlice.reducer;

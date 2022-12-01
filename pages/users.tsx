@@ -2,9 +2,11 @@ import {KeyboardEvent, useEffect} from "react";
 import {useAppDispatch, useAppSelector} from "../store/hooks";
 import {
     fetchAllUsers,
+    navigatePagination,
     resetFilter,
     selectAuthUser,
     selectFilter,
+    selectPage,
     selectUsers,
     updateNameEndsWith,
     updateNameStartsWith,
@@ -21,6 +23,7 @@ export default function Users() {
     const authUser = useAppSelector(selectAuthUser);
     const filter = useAppSelector(selectFilter);
     const users = useAppSelector(selectUsers);
+    const page = useAppSelector(selectPage);
 
     useEffect(() => {
         if (authUser.name === '') {
@@ -32,7 +35,7 @@ export default function Users() {
 
     useEffect(() => {
         dispatch(fetchAllUsers(filter));
-    }, [filter, filter.nameStartsWith, filter.nameEndsWith])
+    }, [filter, filter.nameStartsWith, filter.nameEndsWith, filter.page])
 
 
     const handleUpdateNameStartsWith = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -136,10 +139,29 @@ export default function Users() {
                         </div>
                     ) : (
                         <article className={'content-card prose dark:prose-invert'}>
-                            There are currently no results for the selected filter
+                            There are currently no results for the selected first name and last name filter on the
+                            current page
                         </article>
                     )
                 )}
+
+                <div className="grid grid-cols-2 gap-6 mt-8 w-full">
+                    <button
+                        className={'primary-btn w-full disabled:opacity-50'}
+                        onClick={() => dispatch(navigatePagination(filter.page - 1))}
+                        disabled={page === 1}
+                    >
+                        Previous
+                    </button>
+
+                    <button
+                        className={'primary-btn w-full disabled:opacity-50'}
+                        onClick={() => dispatch(navigatePagination(filter.page + 1))}
+                        disabled={page == 2}
+                    >
+                        Next
+                    </button>
+                </div>
             </div>
         </>
     );
