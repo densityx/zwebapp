@@ -1,7 +1,7 @@
 import {KeyboardEvent, useEffect} from "react";
 import {useAppDispatch, useAppSelector} from "../store/hooks";
 import {
-    fetchAllUsers,
+    fetchAllUsersNoPagination,
     navigatePagination,
     resetFilter,
     selectAuthUser,
@@ -30,13 +30,12 @@ export default function Users() {
             router.push('/login');
         }
 
-        dispatch(fetchAllUsers(filter));
+        dispatch(fetchAllUsersNoPagination());
     }, [router, authUser]);
 
-    useEffect(() => {
-        dispatch(fetchAllUsers(filter));
-    }, [filter, filter.nameStartsWith, filter.nameEndsWith, filter.page])
-
+    // useEffect(() => {
+    //     dispatch(fetchAllUsers(filter));
+    // }, [filter, filter.nameStartsWith, filter.nameEndsWith, filter.page])
 
     const handleUpdateNameStartsWith = (e: KeyboardEvent<HTMLInputElement>) => {
         dispatch(updateNameStartsWith(e.target.value))
@@ -46,9 +45,9 @@ export default function Users() {
         dispatch(updateNameEndsWith(e.target.value))
     }
 
-    if (authUser?.name === '') {
-        return <div>You have to be authenticated to access this page</div>
-    }
+    // if (authUser?.name === '') {
+    //     return <div>You have to be authenticated to access this page</div>
+    // }
 
     return users && (
         <>

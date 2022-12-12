@@ -17,7 +17,6 @@ export interface UsersState {
     email: string;
 }
 
-
 export interface UserState {
     authUser: AuthUserState;
     filter: {
@@ -55,6 +54,39 @@ export const fetchAllUsers = createAsyncThunk(
 
                 return (user.first_name[0] === filter.nameStartsWith || user.last_name[0] === filter.nameEndsWith);
             });
+        } catch (e) {
+            if (process.env.NEXT_PUBLIC_ENV === 'development') {
+                console.log(e.message, 'The\'s an error while requesting the API');
+            }
+        }
+    }
+);
+
+export const fetchAllUsersNoPagination = createAsyncThunk(
+    'user/fetchAllUserNoPagination',
+    async () => {
+        try {
+            let allUser: UsersState[] = [];
+
+            const fetchUser = async (currPage: number) => {
+                const {
+                    data: {
+                        data: users,
+                        page,
+                        total_pages
+                    },
+                } = await axios.get(`https://reqres.in/api/users?page=${currPage}`);
+
+                allUser.push(...users);
+
+                if (page < total_pages) {
+                    await fetchUser(page + 1);
+                }
+            }
+
+            await fetchUser(1);
+
+            return allUser;
         } catch (e) {
             if (process.env.NEXT_PUBLIC_ENV === 'development') {
                 console.log(e.message, 'The\'s an error while requesting the API');
@@ -105,6 +137,9 @@ export const counterSlice = createSlice({
             .addCase(fetchAllUsers.fulfilled, (state, action) => {
                 state.users = action.payload;
             })
+            .addCase(fetchAllUsersNoPagination.fulfilled, (state, action) => {
+                state.users = action.payload;
+            });
     },
 });
 
