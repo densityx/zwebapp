@@ -101,7 +101,7 @@ export const fetchAllUsersNoPagination = createAsyncThunk(
     }
 );
 
-export const counterSlice = createSlice({
+export const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
@@ -156,11 +156,11 @@ export const {
     updateNameEndsWith,
     navigatePagination,
     logoutUser
-} = counterSlice.actions;
+} = userSlice.actions;
 
 export const selectAuthUser = (state: AppState) => state.user.authUser;
 export const selectUsers = (state: AppState) => state.user.users;
 export const selectFilter = (state: AppState) => state.user.filter;
 export const selectPage = (state: AppState) => state.user.filter.page;
 
-export default counterSlice.reducer;
+export default userSlice.reducer;
