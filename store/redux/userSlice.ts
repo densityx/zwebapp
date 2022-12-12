@@ -64,7 +64,7 @@ export const fetchAllUsers = createAsyncThunk(
 
 export const fetchAllUsersNoPagination = createAsyncThunk(
     'user/fetchAllUserNoPagination',
-    async () => {
+    async (filter: { nameStartsWith: string, nameEndsWith: string, page: number }) => {
         try {
             let allUser: UsersState[] = [];
 
@@ -86,7 +86,13 @@ export const fetchAllUsersNoPagination = createAsyncThunk(
 
             await fetchUser(1);
 
-            return allUser;
+            return allUser?.filter((user: { first_name: string, last_name: string }) => {
+                if (!filter.nameStartsWith || !filter.nameEndsWith) {
+                    return user;
+                }
+
+                return (user.first_name[0] === filter.nameStartsWith || user.last_name[0] === filter.nameEndsWith);
+            });
         } catch (e) {
             if (process.env.NEXT_PUBLIC_ENV === 'development') {
                 console.log(e.message, 'The\'s an error while requesting the API');

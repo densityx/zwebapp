@@ -2,7 +2,6 @@ import {KeyboardEvent, useEffect} from "react";
 import {useAppDispatch, useAppSelector} from "../store/hooks";
 import {
     fetchAllUsersNoPagination,
-    navigatePagination,
     resetFilter,
     selectAuthUser,
     selectFilter,
@@ -33,9 +32,9 @@ export default function Users() {
         dispatch(fetchAllUsersNoPagination());
     }, [router, authUser]);
 
-    // useEffect(() => {
-    //     dispatch(fetchAllUsers(filter));
-    // }, [filter, filter.nameStartsWith, filter.nameEndsWith, filter.page])
+    useEffect(() => {
+        dispatch(fetchAllUsersNoPagination(filter));
+    }, [filter, filter.nameStartsWith, filter.nameEndsWith, filter.page])
 
     const handleUpdateNameStartsWith = (e: KeyboardEvent<HTMLInputElement>) => {
         dispatch(updateNameStartsWith(e.target.value))
@@ -144,23 +143,23 @@ export default function Users() {
                     )
                 )}
 
-                <div className="grid grid-cols-2 gap-6 mt-8 w-full">
-                    <button
-                        className={'primary-btn w-full disabled:opacity-50'}
-                        onClick={() => dispatch(navigatePagination(filter.page - 1))}
-                        disabled={page === 1}
-                    >
-                        Previous
-                    </button>
+                {/*<div className="grid grid-cols-2 gap-6 mt-8 w-full">*/}
+                {/*    <button*/}
+                {/*        className={'primary-btn w-full disabled:opacity-50'}*/}
+                {/*        onClick={() => dispatch(navigatePagination(filter.page - 1))}*/}
+                {/*        disabled={page === 1}*/}
+                {/*    >*/}
+                {/*        Previous*/}
+                {/*    </button>*/}
 
-                    <button
-                        className={'primary-btn w-full disabled:opacity-50'}
-                        onClick={() => dispatch(navigatePagination(filter.page + 1))}
-                        disabled={page == 2}
-                    >
-                        Next
-                    </button>
-                </div>
+                {/*    <button*/}
+                {/*        className={'primary-btn w-full disabled:opacity-50'}*/}
+                {/*        onClick={() => dispatch(navigatePagination(filter.page + 1))}*/}
+                {/*        disabled={page == 2}*/}
+                {/*    >*/}
+                {/*        Next*/}
+                {/*    </button>*/}
+                {/*</div>*/}
             </div>
         </>
     );
